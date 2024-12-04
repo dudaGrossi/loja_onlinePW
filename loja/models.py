@@ -21,6 +21,7 @@ class Produto(models.Model):
         return self.nome
 
 class Pedido(models.Model):
+    pedido_id = models.AutoField(primary_key=True, default = 1)
     cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE, related_name = "pedidos")
     produto = models.ManyToManyField(Produto, through = 'PedidoProduto', related_name = "pedidos")
     valor = models.DecimalField(max_digits = 10, decimal_places = 2)
@@ -28,7 +29,7 @@ class Pedido(models.Model):
     status = models.CharField(max_length=10,choices = [('Pendente', 'Pendente'), ('Pago', 'Pago'), ('Enviado', 'Enviado'), ('Entregue', 'Entregue')])
 
     def __str__(self):
-        return self.cliente.nome
+        return self.pedido_id
 
 class Avaliacao(models.Model):
     autor = models.ForeignKey(Cliente, on_delete = models.CASCADE, related_name = "avaliacoes")
@@ -42,8 +43,6 @@ class Avaliacao(models.Model):
 
 class Carrinho(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE, related_name = "carrinhos")
-    produto = models.ManyToManyField(Produto, through = 'ProdutoCarrinho', related_name = "carrinhos")
-
     def __str__(self):
         return self.cliente.nome
 
@@ -54,7 +53,7 @@ class Pagamento(models.Model):
     data = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):
-        return self.pedido.cliente.nome
+        return self.pedido.pedido_id
 
 class Estoque(models.Model):
     produto = models.ForeignKey(Produto, on_delete = models.CASCADE, related_name = "estoque")
@@ -69,4 +68,5 @@ class ProdutoCarrinho(models.Model):
     carrinho = models.ForeignKey(Carrinho, on_delete = models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete = models.CASCADE)
     quantidade = models.PositiveIntegerField()
+
 

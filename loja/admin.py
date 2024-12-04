@@ -17,15 +17,24 @@ class ProdutoAdmin(admin.ModelAdmin):
     list_display = ("nome", "codigo", "preco")
     search_fields = ["nome", "codigo"]
 
+class PedidoProdutoInline(admin.TabularInline):
+    model = PedidoProduto
+
 class PedidoAdmin(admin.ModelAdmin):
+    model = Pedido
+    inlines = [PedidoProdutoInline,]
     list_display = ("cliente", "valor", "status")
 
 class AvaliacaoAdmin(admin.ModelAdmin):
     list_display = ("autor", "pedido")
 
-#carrinho não está atualizando, verificar
+class ProdutoCarrinhoInline(admin.TabularInline):
+    model = ProdutoCarrinho
+
 class CarrinhoAdmin(admin.ModelAdmin):
-    list_display = ("cliente", Produto)
+    model = Carrinho
+    inlines = [ProdutoCarrinhoInline,]
+    list_display = ("cliente",)
 
 class PagamentoAdmin(admin.ModelAdmin):
     list_display = ("pedido", "metodo", "data")
@@ -33,11 +42,8 @@ class PagamentoAdmin(admin.ModelAdmin):
 class EstoqueAdmin(admin.ModelAdmin):
     list_display = ("produto", "quantidade")
 
-class PedidoProdutoAdmin(admin.ModelAdmin):
-    list_display = ("pedido", "produto", "quantidade")
-
-class ProdutoCarrinhoAdmin(admin.ModelAdmin):
-    list_display = ("produto", "quantidade")
+#class PedidoProdutoAdmin(admin.ModelAdmin):
+ #   list_display = ("pedido", "produto", "quantidade")
 
 
 admin.site.register(Cliente, ClienteAdmin)
@@ -47,7 +53,6 @@ admin.site.register(Avaliacao, AvaliacaoAdmin)
 admin.site.register(Carrinho, CarrinhoAdmin)
 admin.site.register(Pagamento, PagamentoAdmin)
 admin.site.register(Estoque, EstoqueAdmin)
-admin.site.register(PedidoProduto, PedidoProdutoAdmin)
-admin.site.register(ProdutoCarrinho, ProdutoCarrinhoAdmin)
+#admin.site.register(PedidoProduto, PedidoProdutoAdmin)
 
 #login e senha: admin
