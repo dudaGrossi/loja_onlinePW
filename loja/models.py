@@ -29,7 +29,7 @@ class Pedido(models.Model):
     status = models.CharField(max_length=10,choices = [('Pendente', 'Pendente'), ('Pago', 'Pago'), ('Enviado', 'Enviado'), ('Entregue', 'Entregue')])
 
     def __str__(self):
-        return self.pedido_id
+        return str(self.pedido_id)
 
 class Avaliacao(models.Model):
     autor = models.ForeignKey(Cliente, on_delete = models.CASCADE, related_name = "avaliacoes")
