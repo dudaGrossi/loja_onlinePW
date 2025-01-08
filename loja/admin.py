@@ -14,7 +14,7 @@ class ClienteAdmin(admin.ModelAdmin):
     search_fields = ["nome"]
 
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ("nome", "codigo", "preco")
+    list_display = ("nome", "codigo", "preco", "imagem")
     search_fields = ["nome", "codigo"]
 
 class PedidoProdutoInline(admin.TabularInline):
