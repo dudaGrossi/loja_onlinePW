@@ -3,15 +3,9 @@ from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth import authenticate, login
 from .models import Carrinho, Produto, ProdutoCarrinho, Cliente
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
-def principal(request):
-    template = loader.get_template('principal.html')
-    return HttpResponse(template.render())
-
+from .forms import ClienteForm
 
 def login_view(request):
     if request.method == 'POST':
@@ -36,10 +30,27 @@ def homepage_view(request):
     print(produtos)
     return render(request, 'homepage.html', {'produtos': produtos})
 
-@receiver(post_save, sender=User)
-def criar_cliente(sender, instance, created, **kwargs):
-    if created and not instance.is_staff:  # Apenas para usuários não-admins
-        Cliente.objects.create(user=instance, nome=instance.username)
+def cadastro_view(request):
+    if request.method == 'POST':
+        form = ClienteForm(request.POST)
+        print(form)
+        if form.is_valid():
+            # Criando o usuário
+            user = User.objects.create_user(
+                username=form.cleaned_data['email'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password']
+            )
+            
+            # Criando o cliente vinculado ao usuário
+            cliente = form.save(commit=False)
+            cliente.user = user
+            cliente.save()
+
+            return redirect('login')  # Redireciona para a página de login
+    else:
+        form = ClienteForm()
+    return render(request, 'cadastro.html', {'form': form})
 
 def adicionar_ao_carrinho(request, codigo):
     produto = get_object_or_404(Produto, codigo=codigo)

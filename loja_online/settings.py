@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     #'grappelli',
+    'widget_tweaks',
     "unfold",  # before django.contrib.admin
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
@@ -142,5 +143,3 @@ LOGOUT_REDIRECT_URL = '/login/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-#os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'meuprojeto.settings')  # Substitua "meuprojeto" pelo nome do seu projeto
-#django.setup()

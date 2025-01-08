@@ -3,14 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Loja Online</title>
+    <title>Fina Estampa</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts (para fonte sofisticada) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo personalizado para a navbar */
+        .navbar {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem; /* Aumenta o tamanho da fonte */
+            padding: 1.2rem 1rem; /* Aumenta o padding para deixar a navbar mais alta */
+            background-color: #ece1c2;
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px; /* Deixa o nome da marca mais espaçado */
+        }
+
+        .nav-link {
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #b29e68 !important; /* Cor dourada suave ao passar o mouse */
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: #6c757d; /* Cor mais clara para os links */
+        }
+
+        .navbar-dark .navbar-nav .nav-link.active {
+            color: #b29e68; /* Cor dourada para o item ativo */
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Minha Loja</a>
+            <a class="navbar-brand" href="#">Fina Estampa</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
