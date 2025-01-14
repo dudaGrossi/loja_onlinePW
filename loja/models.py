@@ -71,6 +71,10 @@ class PedidoProduto(models.Model):
 class ProdutoCarrinho(models.Model):
     carrinho = models.ForeignKey(Carrinho, on_delete = models.CASCADE)
     produto = models.ForeignKey(Produto, on_delete = models.CASCADE)
-    quantidade = models.PositiveIntegerField()
+    quantidade = models.PositiveIntegerField(default=0)
+
+    @property
+    def total(self):
+        return self.quantidade * self.produto.preco
 
 

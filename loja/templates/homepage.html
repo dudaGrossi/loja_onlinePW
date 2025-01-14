@@ -39,6 +39,11 @@
         .navbar-dark .navbar-nav .nav-link.active {
             color: #b29e68; /* Cor dourada para o item ativo */
         }
+
+        .text-center{
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -52,7 +57,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/cart/">Carrinho</a>
+                        <a class="nav-link" href="/carrinho/">Carrinho</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/sair/">Sair</a>
@@ -70,7 +75,7 @@
                 <div class="col-md-2 mb-2">
                     <div class="card h-100">
                         {% if produto.imagem %}
-                            <img src="{{ produto.imagem.url }}" class="card-img-top" alt="{{ produto.nome }}" style="max-height: 50%">
+                            <img src="{{ produto.imagem.url }}" class="card-img-top" alt="{{ produto.nome }}" style="height: 50%">
                         {% else %}
                             <p>Nenhum produto disponível.</p>
                             <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Imagem não disponível">

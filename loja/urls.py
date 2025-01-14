@@ -1,11 +1,13 @@
 from django.urls import path
-from . import views
-from .views import login_view,homepage_view, carrinho_view, cadastro_view
+from .views import login_view,homepage_view, adicionar_ao_carrinho, carrinho_view, cadastro_view, diminuir_quantidade, aumentar_quantidade, finalizar_compra
 
 urlpatterns = [
     path('', login_view, name='login'),
     path('homepage/', homepage_view, name='homepage'),
-    path('adicionar_ao_carrinho/<str:codigo>/', views.adicionar_ao_carrinho, name='adicionar_ao_carrinho'),
+    path('adicionar_ao_carrinho/<str:codigo>/', adicionar_ao_carrinho, name='adicionar_ao_carrinho'),
     path('carrinho/', carrinho_view, name='carrinho'),
     path('cadastro/', cadastro_view, name='cadastro'),
-]
+    path('carrinho/diminuir/<str:codigo>/', diminuir_quantidade, name='diminuir_quantidade'),
+    path('carrinho/aumentar/<str:codigo>/', aumentar_quantidade, name='aumentar_quantidade'),
+    path('finalizar_compra/', finalizar_compra, name='finalizar_compra'),
+]   

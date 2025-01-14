@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.template import loader
 from django.contrib.auth import authenticate, login
-from .models import Carrinho, Produto, ProdutoCarrinho, Cliente
+from .models import Carrinho, Produto, ProdutoCarrinho, Cliente, ProdutoCarrinho, Estoque
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import ClienteForm
@@ -52,22 +50,27 @@ def cadastro_view(request):
         form = ClienteForm()
     return render(request, 'cadastro.html', {'form': form})
 
+@login_required
 def adicionar_ao_carrinho(request, codigo):
-    produto = get_object_or_404(Produto, codigo=codigo)
+    cliente = request.user.cliente
 
-    # Obter cliente relacionado ao usuário logado
-    cliente = Cliente.objects.get(user=request.user)
-
+    # Obtenha ou crie o carrinho para este cliente
     carrinho, created = Carrinho.objects.get_or_create(cliente=cliente)
 
-    # Verifica se o produto já está no carrinho
-    produto_carrinho, created = ProdutoCarrinho.objects.get_or_create(carrinho=carrinho, produto=produto)
+    # Obtenha o produto a ser adicionado
+    produto = get_object_or_404(Produto, id=codigo)
+
+    # Adicione o produto ao carrinho (ou aumente a quantidade)
+    produto_carrinho, created = ProdutoCarrinho.objects.get_or_create(
+        carrinho=carrinho,
+        produto=produto,
+    )
+
     if not created:
-        # Se já existir, incrementa a quantidade
         produto_carrinho.quantidade += 1
         produto_carrinho.save()
 
-    return redirect('carrinho_view')
+    return redirect(carrinho_view)  # Redireciona para a página do carrinho
 
 
 @login_required
@@ -76,3 +79,28 @@ def carrinho_view(request):
     carrinho = Carrinho.objects.filter(cliente=cliente).first()
     itens = carrinho.produtocarrinho_set.all() if carrinho else []
     return render(request, 'carrinho.html', {'carrinho': carrinho, 'itens': itens})
+
+def diminuir_quantidade(request, codigo):
+    cliente = request.user.cliente  # Assumindo que cada usuário está vinculado a um cliente
+    item = get_object_or_404(ProdutoCarrinho, produto__codigo=codigo, carrinho__cliente=cliente)
+
+    # Diminui a quantidade ou remove o item se a quantidade for 1
+    if item.quantidade > 1:
+        item.quantidade -= 1
+        item.save()
+    else:
+        item.delete()
+    return redirect('carrinho')
+
+
+def aumentar_quantidade(request, codigo):
+    cliente = request.user.cliente  # Assumindo que cada usuário está vinculado a um cliente
+    item = get_object_or_404(ProdutoCarrinho, produto__codigo=codigo, carrinho__cliente=cliente)
+
+    item.quantidade += 1
+    item.save()
+
+    return redirect('carrinho')
+
+def finalizar_compra():
+    return redirect('homepage')
