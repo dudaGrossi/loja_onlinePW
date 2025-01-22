@@ -36,6 +36,7 @@ class CarrinhoAdmin(admin.ModelAdmin):
     model = Carrinho
     inlines = [ProdutoCarrinhoInline,]
     list_display = ("cliente",)
+    compressed_fields = ('imagem')
 
 class PagamentoAdmin(admin.ModelAdmin):
     list_display = ("pedido", "metodo", "data")
