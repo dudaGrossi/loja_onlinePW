@@ -14,12 +14,20 @@
             <h1 class="text-center mb-2">Cadastro</h1>
             <form method="post">
                 {% csrf_token %}
-                {% if form.non_field_errors %}
+                
+                <!-- Exibindo erros do formulário -->
+                {% if form.errors %}
                     <div class="alert alert-danger">
-                        {{ form.non_field_errors }}
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
                     </div>
                 {% endif %}
-
+                
                 <!-- Nome Field -->
                 <div class="mb-2">
                     <label for="id_nome" class="form-label">Nome</label>

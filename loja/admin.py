@@ -16,6 +16,7 @@ class ClienteAdmin(admin.ModelAdmin):
 class ProdutoAdmin(admin.ModelAdmin):
     list_display = ("nome", "codigo", "preco", "imagem")
     search_fields = ["nome", "codigo"]
+    compressed_fields = ('imagem')
 
 class PedidoProdutoInline(admin.TabularInline):
     model = PedidoProduto
