@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from .models import Carrinho, Produto, ProdutoCarrinho, Cliente, Pagamento, Pedido, PedidoProduto
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import ClienteForm
 from django.utils import timezone
 
@@ -19,7 +20,7 @@ def login_view(request):
             else:
                 return redirect('/homepage/')
         else:
-            return render(request, 'login.html', {'error': 'Credenciais inválidas!'})
+            return render(request, 'login.html', {'error': 'Credenciais inválidas! Por favor, tente novamente.'})
 
     return render(request, 'login.html')
 
@@ -31,12 +32,8 @@ def cadastro_view(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
         if form.is_valid():
+            # Verifica se as senhas coincidem (já tratado no form)
             password = form.cleaned_data['password']
-            confirm_password = request.POST['confirm_password']
-
-            # Verificar se as senhas coincidem
-            if password != confirm_password:
-                return render(request, 'cadastro.html', {'form': form, 'error': 'As senhas não coincidem!'})
 
             # Criando o usuário
             user = User.objects.create_user(
@@ -44,15 +41,19 @@ def cadastro_view(request):
                 email=form.cleaned_data['email'],
                 password=password
             )
-            
+
             # Criando o cliente vinculado ao usuário
             cliente = form.save(commit=False)
             cliente.user = user
             cliente.save()
 
+            # Adiciona a mensagem de sucesso
+            messages.success(request, 'Cadastro realizado com sucesso! Faça login para acessar sua conta.')
+            
             return redirect('login')  # Redireciona para a página de login
     else:
         form = ClienteForm()
+    
     return render(request, 'cadastro.html', {'form': form})
 
 @login_required

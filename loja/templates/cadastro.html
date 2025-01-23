@@ -14,73 +14,84 @@
             <h1 class="text-center mb-2">Cadastro</h1>
             <form method="post">
                 {% csrf_token %}
-                
-                <!-- Exibindo erros do formulário -->
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-                
+
                 <!-- Nome Field -->
-                <div class="mb-2">
+                <div class="mb-3">
                     <label for="id_nome" class="form-label">Nome</label>
                     {{ form.nome|add_class:"form-control" }}
+                    {% if form.nome.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.nome.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- Endereço Field -->
-                <div class="mb-2">
+                <div class="mb-3">
                     <label for="id_endereco" class="form-label">Endereço</label>
                     {{ form.endereco|add_class:"form-control" }}
+                    {% if form.endereco.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.endereco.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- E-mail Field -->
-                <div class="mb-2">
+                <div class="mb-3">
                     <label for="id_email" class="form-label">E-mail</label>
                     {{ form.email|add_class:"form-control" }}
+                    {% if form.email.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.email.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- Telefone Field -->
-                <div class="mb-2">
+                <div class="mb-3">
                     <label for="id_telefone" class="form-label">Telefone</label>
                     {{ form.telefone|add_class:"form-control" }}
+                    {% if form.telefone.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.telefone.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- Data de Nascimento Field -->
-                <div class="mb-2">
+                <div class="mb-3">
                     <label for="id_dataNasc" class="form-label">Data de Nascimento</label>
                     {{ form.dataNasc|add_class:"form-control" }}
+                    {% if form.dataNasc.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.dataNasc.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- Senha Field -->
-                <div class="mb-2">
+                <div class="mb-3">
                     <label for="id_password" class="form-label">Senha</label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        id="id_password" 
-                        class="form-control" 
-                        placeholder="Digite sua senha" 
-                        required>
+                    {{ form.password|add_class:"form-control" }}
+                    {% if form.password.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.password.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <!-- Confirmar Senha Field -->
-                <div class="mb-2">
+                <div class="mb-3">
                     <label for="id_confirm_password" class="form-label">Confirmar Senha</label>
-                    <input 
-                        type="password" 
-                        name="confirm_password" 
-                        id="id_confirm_password" 
-                        class="form-control" 
-                        placeholder="Confirme sua senha" 
-                        required>
+                    {{ form.confirm_password|add_class:"form-control" }}
+                    {% if form.confirm_password.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.confirm_password.errors.0 }}
+                        </div>
+                    {% endif %}
                 </div>
+
 
                 <!-- Submit Button -->
                 <div class="d-grid">

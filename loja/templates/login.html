@@ -11,13 +11,24 @@
     <div class="container d-flex align-items-center justify-content-center min-vh-100">
         <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
             <h1 class="text-center mb-4">Login</h1>
+
+            {% if error %}
+                <div class="alert alert-danger text-center">
+                    {{ error }}
+                </div>
+            {% endif %} 
+
+            <!-- Exibição de mensagens -->
+            {% if messages %}
+            <div class="alert alert-success">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
             <form method="post">
                 {% csrf_token %}
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        {{ form.non_field_errors }}
-                    </div>
-                {% endif %}
                 
                 <!-- Username Field -->
                 <div class="mb-3">

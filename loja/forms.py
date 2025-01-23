@@ -14,7 +14,8 @@ class ClienteForm(forms.ModelForm):
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
 
+        # Verifica se as senhas coincidem
         if password and confirm_password and password != confirm_password:
-            raise forms.ValidationError('As senhas não coincidem')
+            self.add_error('confirm_password', 'As senhas não coincidem.')  # Adiciona o erro ao campo 'confirm_password'
 
         return cleaned_data
