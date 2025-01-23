@@ -70,7 +70,12 @@ def adicionar_ao_carrinho(request, codigo):
         produto=produto,
     )
 
-    if not created:
+    if created:
+        # Se o produto foi criado, inicialize a quantidade como 1
+        produto_carrinho.quantidade = 1
+        produto_carrinho.save()
+    else:
+        # Caso contrário, apenas aumente a quantidade
         produto_carrinho.quantidade += 1
         produto_carrinho.save()
 
@@ -78,11 +83,17 @@ def adicionar_ao_carrinho(request, codigo):
 
 
 @login_required
+@login_required
 def carrinho_view(request):
     cliente = Cliente.objects.get(user=request.user)
     carrinho = Carrinho.objects.filter(cliente=cliente).first()
     itens = carrinho.produtocarrinho_set.all() if carrinho else []
-    return render(request, 'carrinho.html', {'carrinho': carrinho, 'itens': itens})
+
+    # Calcular o total geral
+    total_geral = sum(item.produto.preco * item.quantidade for item in itens)
+
+    return render(request, 'carrinho.html', {'carrinho': carrinho, 'itens': itens, 'total_geral': total_geral})
+
 
 def diminuir_quantidade(request, codigo):
     cliente = request.user.cliente  # Assumindo que cada usuário está vinculado a um cliente
