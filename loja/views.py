@@ -108,3 +108,12 @@ def aumentar_quantidade(request, codigo):
 
 def finalizar_compra():
     return redirect('homepage')
+
+def remover_do_carrinho(request, codigo):
+    cliente = request.user.cliente  # Assumindo que cada usuário está vinculado a um cliente
+    item = get_object_or_404(ProdutoCarrinho, produto__codigo=codigo, carrinho__cliente=cliente)
+
+    # Remove o item do carrinho
+    item.delete()
+
+    return redirect('carrinho')
