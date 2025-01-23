@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from .models import Carrinho, Produto, ProdutoCarrinho, Cliente
+from .models import Carrinho, Produto, ProdutoCarrinho, Cliente, Pagamento, Pedido, PedidoProduto
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import ClienteForm
+from django.utils import timezone
 
 def login_view(request):
     if request.method == 'POST':
@@ -81,8 +82,6 @@ def adicionar_ao_carrinho(request, codigo):
 
     return redirect(carrinho_view)  # Redireciona para a página do carrinho
 
-
-@login_required
 @login_required
 def carrinho_view(request):
     cliente = Cliente.objects.get(user=request.user)
@@ -117,8 +116,49 @@ def aumentar_quantidade(request, codigo):
 
     return redirect('carrinho')
 
-def finalizar_compra():
-    return redirect('homepage')
+@login_required
+def finalizar_compra(request):
+    cliente = Cliente.objects.get(user=request.user)
+    carrinho = Carrinho.objects.filter(cliente=cliente).first()
+    itens = carrinho.produtocarrinho_set.all() if carrinho else []
+    total_geral = sum(item.produto.preco * item.quantidade for item in itens)
+
+    if request.method == 'POST':
+        nome_completo = request.POST.get('nome_completo')
+        endereco = request.POST.get('endereco')
+        metodo_pagamento = request.POST.get('metodo_pagamento')
+
+        # Criar o pedido
+        pedido = Pedido.objects.create(
+            cliente=cliente,
+            valor=total_geral,
+            status='Pendente'
+        )
+
+        # Adicionar produtos ao pedido
+        for item in itens:
+            PedidoProduto.objects.create(
+                pedido=pedido,
+                produto=item.produto,
+                quantidade=item.quantidade
+            )
+
+        # Registrar o pagamento
+        Pagamento.objects.create(
+            pedido=pedido,
+            metodo=metodo_pagamento
+        )
+
+        # Esvaziar o carrinho
+        carrinho.produtocarrinho_set.all().delete()
+
+        return redirect('homepage')  # Redireciona para a homepage após finalizar o pedido
+
+    return render(request, 'finalizar_compra.html', {
+        'cliente': cliente,
+        'itens': itens,
+        'total_geral': total_geral
+    })
 
 def remover_do_carrinho(request, codigo):
     cliente = request.user.cliente  # Assumindo que cada usuário está vinculado a um cliente
