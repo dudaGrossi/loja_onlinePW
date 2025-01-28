@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ClienteForm
-from django.utils import timezone
+from django.contrib.auth import logout
 
 def login_view(request):
     if request.method == 'POST':
@@ -169,3 +169,7 @@ def remover_do_carrinho(request, codigo):
     item.delete()
 
     return redirect('carrinho')
+
+def sair(request):
+    logout(request)  # Remove a autenticação do usuário
+    return redirect('login')
