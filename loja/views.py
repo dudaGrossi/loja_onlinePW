@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from .models import Carrinho, Produto, ProdutoCarrinho, Cliente, Pagamento, Pedido, PedidoProduto, Avaliacao
+from .models import Carrinho, Produto, ProdutoCarrinho, Cliente, Pagamento, Pedido, PedidoProduto, Avaliacao, Estoque
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -134,16 +134,22 @@ def finalizar_compra(request):
         pedido = Pedido.objects.create(
             cliente=cliente,
             valor=total_geral,
-            status='Pendente'
+            status='Pendente'  # Status 'Pendente' permanece
         )
 
-        # Adicionar produtos ao pedido
+        # Adicionar produtos ao pedido e atualizar o estoque
         for item in itens:
+            # Criar a relação do produto com o pedido
             PedidoProduto.objects.create(
                 pedido=pedido,
                 produto=item.produto,
                 quantidade=item.quantidade
             )
+
+            # Atualizar o estoque
+            estoque = Estoque.objects.get(produto=item.produto)  # Obter o estoque do produto
+            estoque.quantidade -= item.quantidade  # Subtrair a quantidade comprada
+            estoque.save()  # Salvar a alteração no estoque
 
         # Registrar o pagamento
         Pagamento.objects.create(
@@ -162,6 +168,7 @@ def finalizar_compra(request):
         'itens': itens,
         'total_geral': total_geral
     })
+
 
 @login_required
 def pedido_sucesso(request, pedido_id):
