@@ -30,6 +30,7 @@ class PedidoAdmin(admin.ModelAdmin):
 
 class AvaliacaoAdmin(admin.ModelAdmin):
     list_display = ("autor", "pedido")
+    compressed_fields = ('imagem')
 
 class ProdutoCarrinhoInline(admin.TabularInline):
     model = ProdutoCarrinho

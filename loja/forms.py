@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente
+from .models import Cliente, Avaliacao
 
 class ClienteForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(), label="Senha")
@@ -19,3 +19,8 @@ class ClienteForm(forms.ModelForm):
             self.add_error('confirm_password', 'As senhas não coincidem.')  # Adiciona o erro ao campo 'confirm_password'
 
         return cleaned_data
+
+class AvaliacaoForm(forms.ModelForm):
+    class Meta:
+        model = Avaliacao
+        fields = ['estrelas', 'comentario']

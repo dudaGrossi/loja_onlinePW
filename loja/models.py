@@ -39,7 +39,7 @@ class Avaliacao(models.Model):
     autor = models.ForeignKey(Cliente, on_delete = models.CASCADE, related_name = "avaliacoes")
     pedido = models.ForeignKey(Pedido, on_delete = models.CASCADE, related_name = "avaliacoes")
     comentario = models.TextField(blank = True, null = True)
-    estrelas = models.IntegerField(choices = [(1, '1 estrela'), (2, '2 estrela'), (3, '3 estrela'), (4, '4 estrela'), (5, '5 estrela')])
+    estrelas = models.IntegerField(choices = [(1, '1 estrela'), (2, '2 estrela'), (3, '3 estrela'), (4, '4 estrela'), (5, '5 estrela')], default=5)
 
     def __str__(self):
         return self.autor.nome

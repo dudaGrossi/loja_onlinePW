@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view,homepage_view, adicionar_ao_carrinho, carrinho_view, cadastro_view, diminuir_quantidade, aumentar_quantidade, remover_do_carrinho, finalizar_compra, sair, pedido_sucesso
+from .views import login_view,homepage_view, adicionar_ao_carrinho, carrinho_view, cadastro_view, diminuir_quantidade, aumentar_quantidade, remover_do_carrinho, finalizar_compra, sair, pedido_sucesso, historico_pedidos, avaliar_pedido
 
 urlpatterns = [
     path('', login_view, name='login'),
@@ -13,4 +13,6 @@ urlpatterns = [
     path('carrinho/remover_do_carrinho/<str:codigo>/', remover_do_carrinho, name='remover_do_carrinho'),
     path('finalizar_compra/', finalizar_compra, name='finalizar_compra'),
     path('pedido-sucesso/<int:pedido_id>/', pedido_sucesso, name='pedido_sucesso'),
+    path('historico/', historico_pedidos, name='historico_pedidos'),
+    path('avaliar/<int:pedido_id>/', avaliar_pedido, name='avaliar_pedido'),
 ]   

@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from .models import Carrinho, Produto, ProdutoCarrinho, Cliente, Pagamento, Pedido, PedidoProduto
+from .models import Carrinho, Produto, ProdutoCarrinho, Cliente, Pagamento, Pedido, PedidoProduto, Avaliacao
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import ClienteForm
+from .forms import ClienteForm, AvaliacaoForm
 from django.contrib.auth import logout
 from django.urls import reverse
 
@@ -180,3 +180,28 @@ def remover_do_carrinho(request, codigo):
 def sair(request):
     logout(request)  # Remove a autenticação do usuário
     return redirect('login')
+
+@login_required
+def historico_pedidos(request):
+    cliente = request.user.cliente  # Obtém o cliente logado
+    pedidos = Pedido.objects.filter(cliente=cliente).order_by('-data')  # Lista pedidos mais recentes primeiro
+
+    return render(request, 'historico_pedidos.html', {'pedidos': pedidos})
+
+@login_required
+def avaliar_pedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, pedido_id=pedido_id, cliente=request.user.cliente)
+
+    # Verifica se já existe uma avaliação
+    avaliacao, created = Avaliacao.objects.get_or_create(autor=pedido.cliente, pedido=pedido)
+
+    if request.method == 'POST':
+        form = AvaliacaoForm(request.POST, instance=avaliacao)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Avaliação registrada com sucesso!')
+            return redirect('historico_pedidos')
+    else:
+        form = AvaliacaoForm(instance=avaliacao)
+
+    return render(request, 'avaliar_pedido.html', {'pedido': pedido, 'form': form})
