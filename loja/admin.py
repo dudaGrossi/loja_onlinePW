@@ -12,6 +12,7 @@ from .models import ProdutoCarrinho
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ("nome", "email")
     search_fields = ["nome"]
+    compressed_fields = ('imagem')
 
 class ProdutoAdmin(admin.ModelAdmin):
     list_display = ("nome", "codigo", "preco", "imagem")
@@ -41,9 +42,11 @@ class CarrinhoAdmin(admin.ModelAdmin):
 
 class PagamentoAdmin(admin.ModelAdmin):
     list_display = ("pedido", "metodo", "data")
+    compressed_fields = ('imagem')
 
 class EstoqueAdmin(admin.ModelAdmin):
     list_display = ("produto", "quantidade")
+    compressed_fields = ('imagem')
 
 #class PedidoProdutoAdmin(admin.ModelAdmin):
  #   list_display = ("pedido", "produto", "quantidade")
