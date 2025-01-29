@@ -57,7 +57,7 @@ class Pagamento(models.Model):
     data = models.DateTimeField(auto_now_add = True)
 
     def __str__(self):
-        return self.pedido.pedido_id
+        return f"Pagamento {self.pedido.pedido_id} - {self.metodo}"
 
 class Estoque(models.Model):
     produto = models.ForeignKey(Produto, on_delete = models.CASCADE, related_name = "estoque")
