@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import ClienteForm
 from django.contrib.auth import logout
+from django.urls import reverse
 
 def login_view(request):
     if request.method == 'POST':
@@ -153,13 +154,19 @@ def finalizar_compra(request):
         # Esvaziar o carrinho
         carrinho.produtocarrinho_set.all().delete()
 
-        return redirect('homepage')  # Redireciona para a homepage após finalizar o pedido
+        # Redirecionar para a página de sucesso
+        return redirect(reverse('pedido_sucesso', kwargs={'pedido_id': pedido.pedido_id}))
 
     return render(request, 'finalizar_compra.html', {
         'cliente': cliente,
         'itens': itens,
         'total_geral': total_geral
     })
+
+@login_required
+def pedido_sucesso(request, pedido_id):
+    pedido = get_object_or_404(Pedido, pedido_id=pedido_id, cliente=request.user.cliente)
+    return render(request, 'pedido_sucesso.html', {'pedido': pedido})
 
 def remover_do_carrinho(request, codigo):
     cliente = request.user.cliente  # Assumindo que cada usuário está vinculado a um cliente

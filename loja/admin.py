@@ -25,6 +25,7 @@ class PedidoAdmin(admin.ModelAdmin):
     model = Pedido
     inlines = [PedidoProdutoInline,]
     list_display = ("cliente", "valor", "status")
+    compressed_fields = ('imagem')
 
 class AvaliacaoAdmin(admin.ModelAdmin):
     list_display = ("autor", "pedido")

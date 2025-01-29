@@ -25,7 +25,7 @@ class Produto(models.Model):
         return self.nome
 
 class Pedido(models.Model):
-    pedido_id = models.AutoField(primary_key=True, default = 1)
+    pedido_id = models.AutoField(primary_key=True)
     cliente = models.ForeignKey(Cliente, on_delete = models.CASCADE, related_name = "pedidos")
     produto = models.ManyToManyField(Produto, through = 'PedidoProduto', related_name = "pedidos")
     valor = models.DecimalField(max_digits = 10, decimal_places = 2)
